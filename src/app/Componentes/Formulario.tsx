@@ -37,25 +37,34 @@ export const Formulario = () => {
       setErrorLugarGrabado("Debe seleccionar un lugar grabado");
       return;
     }
-    if (isNaN(parseInt(edad))) {
-      setErrorEdad("La edad debe ser un número válido");
+    if (edad.trim() === "") {
+      setErrorEdad("Debe ingresar la edad");
       return;
+    } else {
+      const edadNumber = parseInt(edad);
+      if (isNaN(edadNumber) || edadNumber < 0) {
+        setErrorEdad("Debe ingresar una edad válida y no negativa");
+        return;
+      }
+      setEdad(edadNumber.toString());
+      setErrorEdad("");
     }
 
     if (email.trim() === "") {
       setErrorEmail("Debe ingresar un email válido");
       return;
-    } else {
-      setEmail(email.trim());
-    }
-
-    if (telefono.trim() === "") {
-      setErrorTelefono("Debe ingresar un número de teléfono válido");
+    } else if (!email.match(/^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/)) {
+      setErrorEmail("Debe ingresar un email válido");
       return;
     } else {
-      setTelefono(telefono.trim());
+      setErrorEmail("");
     }
-
+    if (!telefono.match(/^\d{9}$/)) {
+      setErrorTelefono("Debe ingresar un número de teléfono válido (9 dígitos)");
+      return;
+    } else {
+      setErrorTelefono("");
+    }
     const p: Persona = {
       nombre,
       apellido,
@@ -147,6 +156,7 @@ export const Formulario = () => {
           value={apellido}
         /><br />
         <span>{errorApellido}</span><br />
+
         <label>Edad: </label><br />
         <input
           type="number"
