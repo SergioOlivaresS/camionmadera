@@ -15,6 +15,9 @@ export const Formulario = () => {
   const [errorApellido, setErrorApellido] = useState("");
   const [errorEmail, setErrorEmail] = useState("");
   const [errorTelefono, setErrorTelefono] = useState("");
+  const [errorLugarGrabado, setErrorLugarGrabado] = useState("")
+  const [errorEdad, setErrorEdad] = useState("");
+
 
   const registrar = () => {
     if (nombre.trim() === "") {
@@ -29,6 +32,14 @@ export const Formulario = () => {
       return;
     } else {
       setApellido(apellido.trim());
+    }
+    if (!lugarGrabado) {
+      setErrorLugarGrabado("Debe seleccionar un lugar grabado");
+      return;
+    }
+    if (isNaN(parseInt(edad))) {
+      setErrorEdad("La edad debe ser un número válido");
+      return;
     }
 
     if (email.trim() === "") {
@@ -45,7 +56,6 @@ export const Formulario = () => {
       setTelefono(telefono.trim());
     }
 
-    // Asumiendo que se validó todo
     const p: Persona = {
       nombre,
       apellido,
@@ -111,18 +121,17 @@ export const Formulario = () => {
     }
   };
 
-  const handleRadioChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const cambiarRadio = (event: ChangeEvent<HTMLInputElement>) => {
     setLugarGrabado(event.target.value);
   };
 
-  const handleComentarioChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+  const cambiarComentario = (event: ChangeEvent<HTMLTextAreaElement>) => {
     setComentario(event.target.value);
   };
   return (
     
     <form><br />
       <h2>Ingrese los datos para la solicitud de su producto </h2><br />
-      <div className="mb-4">
         <label>Nombre: </label><br />
         <input
           type="text"
@@ -130,8 +139,7 @@ export const Formulario = () => {
           value={nombre}
         /><br />
         <span>{errorNombre}</span><br />
-      </div>
-      <div className="mb-4">
+      
         <label>Apellido: </label><br />
         <input
           type="text"
@@ -139,17 +147,15 @@ export const Formulario = () => {
           value={apellido}
         /><br />
         <span>{errorApellido}</span><br />
-      </div>
-      <div className="mb-4">
         <label>Edad: </label><br />
         <input
           type="number"
           onChange={(e) => setEdad(e.target.value)}
           value={edad}
         /><br />
+        <span>{errorEdad}</span>
         <br />
-      </div>
-      <div className="mb-4">
+      
       <label>Posicion Grabado</label><br />
         <input
           type="radio"
@@ -157,7 +163,7 @@ export const Formulario = () => {
           name="lugarGrabado"
           value="izquierda"
           checked={lugarGrabado === "izquierda"}
-          onChange={handleRadioChange}
+          onChange={cambiarRadio}
         />
         <label htmlFor="lugarizquierda">Izquierda</label><br />
         <input
@@ -166,11 +172,9 @@ export const Formulario = () => {
           name="lugarGrabado"
           value="derecha"
           checked={lugarGrabado === "derecha"}
-          onChange={handleRadioChange}
+          onChange={cambiarRadio}
         />
-        <label htmlFor="lugarderecha">Derecha</label><br />
-      </div>
-      <div className="mb-4">
+        <label htmlFor="lugarderecha">Derecha</label><br />      
         <label>Email: </label><br />
         <input
           type="email"
@@ -178,8 +182,7 @@ export const Formulario = () => {
           value={email}
         /><br />
         <span>{errorEmail}</span><br />
-      </div>
-      <div className="mb-4">
+     
         <label>Teléfono: </label><br />
         <input
           type="tel"
@@ -187,16 +190,15 @@ export const Formulario = () => {
           value={telefono}
         /><br />
         <span>{errorTelefono}</span><br />
-      </div>
-      <div className="mb-4">
+     
         <label>Comentarios: </label><br />
       <textarea
           rows={4}
           cols={50}
           value={comentario}
-          onChange={handleComentarioChange}
+          onChange={cambiarComentario}
         /><br />
-      </div>
+     
       
       <button type='button' onClick={registrar}>Registrar</button>
     </form>

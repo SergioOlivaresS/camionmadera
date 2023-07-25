@@ -20,7 +20,7 @@ export const Eliminar = () => {
   }, [idPersona]);
 
 
-  const handleEliminar = async () => {
+  const Eliminador = async () => {
     try {
       if (idPersona) {
         await eliminarPersona(idPersona);
@@ -35,7 +35,7 @@ export const Eliminar = () => {
     }
   };
 
-  const handleCancelar = () => {
+  const Cancelador = () => {
     navigate('/registros');
   };
 
@@ -49,11 +49,9 @@ export const Eliminar = () => {
       <p>Nombre: {persona.nombre}</p>
       <p>Apellido: {persona.apellido}</p>
       <p>Edad:{persona.edad}</p>
-      <p>Email:{persona.email}</p>
-      {/* Mostrar otros campos para los detalles de la persona (lugarGrabado, edad, email, telefono, etc.) */}
-      
-      <button onClick={handleEliminar}>Confirmar Eliminación</button>
-      <button onClick={handleCancelar}>Cancelar</button>
+      <p>Email:{persona.email}</p>  
+      <button onClick={Eliminador}>Confirmar Eliminación</button>
+      <button onClick={Cancelador}>Cancelar</button>
     </div>
   );
 };

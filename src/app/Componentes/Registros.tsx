@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { eliminarPersona, obtenerPersonas } from "../Firebase/promesas";
+import {  obtenerPersonas } from "../Firebase/promesas";
 import { Persona } from "../Interfaces/IFormulario";
 import { Link } from "react-router-dom";
 
@@ -13,18 +13,7 @@ export const Registros = () => {
       setPersonas(listado);
     });
   }, []);
-  const eliminarPersona = async (idPersona: string) => {
-    if (window.confirm("¿Estás seguro de que quieres eliminar esta persona?")) {
-      try {
-        await eliminarPersona(idPersona);
-        alert("Persona eliminada correctamente.");
-        obtenerPersonas().then((listado) => setPersonas(listado));
-      } catch (error) {
-        console.error("Error al eliminar persona:", error);
-        alert("Hubo un error al eliminar la persona. Inténtalo de nuevo más tarde.");
-      }
-    }
-  };
+  
   const renderizarDatos = () => {
     if (personas.length === 0) {
       return (

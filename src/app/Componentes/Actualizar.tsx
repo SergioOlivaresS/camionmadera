@@ -1,30 +1,30 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Persona } from '../Interfaces/IFormulario';
-import { actualizarPersona, obtenerPersona, eliminarPersona } from '../Firebase/promesas';
+import { actualizarPersona, obtenerPersona,} from '../Firebase/promesas';
 
 
 export const Actualizar = () => {
   const params = useParams();
-  const [nombre, setNombre] = useState('');
-  const [apellido, setApellido] = useState('');
-  const [lugarGrabado, setLugarGrabado] = useState('');
-  const [edad, setEdad] = useState(''); 
-  const [email, setEmail] = useState('');
-  const [telefono, setTelefono] = useState('');
-  const [comentario, setComentario] = useState('');
-  const [errorNombre, setErrorNombre] = useState('');
-  const [errorApellido, setErrorApellido] = useState('');
-  const [errorEmail, setErrorEmail] = useState('');
-  const [errorTelefono, setErrorTelefono] = useState('');
-  const [idPersona, setIdPersona] = useState(''); 
+  const [nombre, setNombre] = useState("");
+  const [apellido, setApellido] = useState("");
+  const [lugarGrabado, setLugarGrabado] = useState("");
+  const [edad, setEdad] = useState(""); 
+  const [email, setEmail] = useState("");
+  const [telefono, setTelefono] = useState("");
+  const [comentario, setComentario] = useState("");
+  const [errorNombre, setErrorNombre] = useState("");
+  const [errorApellido, setErrorApellido] = useState("");
+  const [errorEmail, setErrorEmail] = useState("");
+  const [errorTelefono, setErrorTelefono] = useState("");
+  const [idPersona, setIdPersona] = useState(""); 
   const [isLoading, setIsLoading] = useState(false);
   const [updateSuccess, setUpdateSuccess] = useState(false);
 
   useEffect(() => {
     if (params.idPersona !== undefined) {
       obtenerPersona(params.idPersona).then((v) => {
-        if (v !== undefined) {
+        if (v != undefined && v.idPersona!= undefined) {
           setNombre(v.nombre);
           setApellido(v.apellido);
           setLugarGrabado(v.lugarGrabado);
@@ -32,14 +32,12 @@ export const Actualizar = () => {
           setEmail(v.email);
           setTelefono(v.telefono.toString()); 
           setComentario(v.comentario);
-          if (v.idPersona) {
-            setIdPersona(v.idPersona);
-          }
+          setIdPersona(v.idPersona);  
         }
       });
     }
   }, [params.idPersona]);
-const registrar = async() => {
+const actualizar = () => {
 
   if (nombre.trim() === "") {
     setErrorNombre("No valen espacios en blanco");
@@ -76,13 +74,9 @@ const registrar = async() => {
     comentario,
   };
 
-  try {
-    await actualizarPersona(idPersona, p);
-    alert("Datos actualizados de " + nombre + " " + apellido);
-  } catch (error) {
-    console.error("Error al actualizar persona:", error);
-    alert("Hubo un error al actualizar los datos. Por favor, inténtalo de nuevo.");
-  }
+  actualizarPersona(idPersona, p).then(()=>{
+      alert("Datos actualizados de " + nombre + " " + apellido);
+  })
 
   console.log(nombre);
   console.log(apellido);
@@ -129,29 +123,16 @@ const registrar = async() => {
     }
   };
 
-  const handleRadioChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const cambiarRadio = (event: ChangeEvent<HTMLInputElement>) => {
     setLugarGrabado(event.target.value);
   };
 
-  const handleComentarioChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+  const cambiarComentario = (event: ChangeEvent<HTMLTextAreaElement>) => {
     setComentario(event.target.value);
   };
-
-  const eliminarPersonaDB = async (idPersona: string) => {
-    try {
-      await eliminarPersona(idPersona);
-    } catch (error) {
-      console.error("Error al eliminar persona:", error);
-      alert("Hubo un error al eliminar la persona. Por favor, inténtalo de nuevo.");
-    }
-  };
-
-
   return (
-    
     <form><br />
       <h2>Actualice los datos necesarios </h2><br />
-      <div className="mb-4">
         <label>Nombre: </label><br />
         <input
           type="text"
@@ -159,8 +140,7 @@ const registrar = async() => {
           value={nombre}
         /><br />
         <span>{errorNombre}</span><br />
-      </div>
-      <div className="mb-4">
+      
         <label>Apellido: </label><br />
         <input
           type="text"
@@ -168,8 +148,7 @@ const registrar = async() => {
           value={apellido}
         /><br />
         <span>{errorApellido}</span><br />
-      </div>
-      <div className="mb-4">
+     
         <label>Edad: </label><br />
         <input
           type="number"
@@ -177,8 +156,6 @@ const registrar = async() => {
           value={edad}
         /><br />
         <br />
-      </div>
-      <div className="mb-4">
       <label>Posicion Grabado</label><br />
         <input
           type="radio"
@@ -186,7 +163,7 @@ const registrar = async() => {
           name="lugarGrabado"
           value="izquierda"
           checked={lugarGrabado === "izquierda"}
-          onChange={handleRadioChange}
+          onChange={cambiarRadio}
         />
         <label htmlFor="lugarizquierda">Izquierda</label><br />
         <input
@@ -195,11 +172,10 @@ const registrar = async() => {
           name="lugarGrabado"
           value="derecha"
           checked={lugarGrabado === "derecha"}
-          onChange={handleRadioChange}
+          onChange={cambiarRadio}
         />
         <label htmlFor="lugarderecha">Derecha</label><br />
-      </div>
-      <div className="mb-4">
+     
         <label>Email: </label><br />
         <input
           type="email"
@@ -207,8 +183,7 @@ const registrar = async() => {
           value={email}
         /><br />
         <span>{errorEmail}</span><br />
-      </div>
-      <div className="mb-4">
+     
         <label>Teléfono: </label><br />
         <input
           type="tel"
@@ -216,22 +191,18 @@ const registrar = async() => {
           value={telefono}
         /><br />
         <span>{errorTelefono}</span><br />
-      </div>
-      <div className="mb-4">
+     
         <label>Comentarios: </label><br />
       <textarea
           rows={4}
           cols={50}
           value={comentario}
-          onChange={handleComentarioChange}
+          onChange={cambiarComentario}
         /><br />
-      </div>
+     
       
-      <button type='button' onClick={registrar} disabled={isLoading}>
+      <button type='button' onClick={actualizar} disabled={isLoading}>
         {isLoading ? "Actualizando..." : "Actualizar"}
-      </button>
-      <button type='button' onClick={() => eliminarPersonaDB(idPersona)} disabled={isLoading}>
-        {isLoading ? "Eliminando..." : "Eliminar"}
       </button>
       {updateSuccess && <div>Actualización exitosa</div>}
     </form>
