@@ -45,11 +45,12 @@ export const Eliminar = () => {
 
   return (
     <div><br />
-      <h2>Detalles de la persona a eliminar:</h2><br />
+      <h2>Datos de la persona a eliminar:</h2><br />
       <p>Nombre: {persona.nombre}</p>
       <p>Apellido: {persona.apellido}</p>
       <p>Edad:{persona.edad}</p>
       <p>Email:{persona.email}</p>  
+      <p>Comentario:{persona.comentario}</p>
       <button onClick={Eliminador}>Confirmar Eliminación</button>
       <button onClick={Cancelador}>Cancelar</button>
     </div>

@@ -10,6 +10,8 @@ export const Formulario = () => {
   const [edad, setEdad] = useState("");
   const [email, setEmail] = useState("");
   const [telefono, setTelefono] = useState("");
+  const [fechaEntrega, setFechaEntrega] = useState(new Date());
+  const [horaEntrega, setHoraEntrega] = useState(""); 
   const [comentario, setComentario] = useState("");
   const [errorNombre, setErrorNombre] = useState("");
   const [errorApellido, setErrorApellido] = useState("");
@@ -17,7 +19,8 @@ export const Formulario = () => {
   const [errorTelefono, setErrorTelefono] = useState("");
   const [errorLugarGrabado, setErrorLugarGrabado] = useState("")
   const [errorEdad, setErrorEdad] = useState("");
-
+  const [errorFechaEntrega, setErrorFechaEntrega] = useState("")
+  const [errorHoraEntrega, setErrorHoraEntrega] = useState("")
 
   const registrar = () => {
     if (nombre.trim() === "") {
@@ -33,21 +36,25 @@ export const Formulario = () => {
     } else {
       setApellido(apellido.trim());
     }
-    if (!lugarGrabado) {
-      setErrorLugarGrabado("Debe seleccionar un lugar grabado");
-      return;
-    }
+  
     if (edad.trim() === "") {
       setErrorEdad("Debe ingresar la edad");
       return;
     } else {
       const edadNumber = parseInt(edad);
-      if (isNaN(edadNumber) || edadNumber < 0) {
+      if (isNaN(edadNumber) || edadNumber <= 0) {
         setErrorEdad("Debe ingresar una edad válida y no negativa");
         return;
       }
       setEdad(edadNumber.toString());
       setErrorEdad("");
+    }
+
+    if (!lugarGrabado) {
+      setErrorLugarGrabado("Debe seleccionar un lugar grabado");
+      return;
+    } else {
+      setErrorLugarGrabado("");
     }
 
     if (email.trim() === "") {
@@ -65,6 +72,17 @@ export const Formulario = () => {
     } else {
       setErrorTelefono("");
     }
+    if (fechaEntrega === null || isNaN(fechaEntrega.getTime())) {
+      setErrorFechaEntrega("Debe ingresar una fecha de entrega válida");
+      return;
+    }
+
+    if (horaEntrega.trim() === "") {
+      setErrorHoraEntrega("Debe seleccionar una hora de entrega");
+      return;
+    } else {
+      setErrorHoraEntrega("");
+    }
     const p: Persona = {
       nombre,
       apellido,
@@ -72,28 +90,35 @@ export const Formulario = () => {
       edad: parseInt(edad),
       email,
       telefono: parseInt(telefono),
+      fechaEntrega,
+      horaEntrega,
       comentario,
     };
 
     registrarPersona(p);
-    console.log(nombre);
-    console.log(apellido);
-    console.log(lugarGrabado);
-    console.log(edad);
-    console.log(email);
-    console.log(telefono);
-    console.log(comentario);
-    alert("Se registro a " + nombre + " " + apellido);
+  console.log(nombre);
+  console.log(apellido);
+  console.log(lugarGrabado);
+  console.log(edad);
+  console.log(email);
+  console.log(telefono);
+  console.log(fechaEntrega);
+  console.log(horaEntrega);
+  console.log(comentario);
+  alert("Se registró a " + nombre + " " + apellido);
 
-    // Limpiar campos después del registro
-    setNombre("");
-    setApellido("");
-    setLugarGrabado("");
-    setEdad("");
-    setEmail("");
-    setTelefono("");
-    setComentario("");
-  };
+  // Limpiar campos después del registro
+  setNombre("");
+  setApellido("");
+  setLugarGrabado("");
+  setEdad("");
+  setEmail("");
+  setTelefono("");
+  setFechaEntrega(new Date());
+  setHoraEntrega("");
+  setComentario("");
+};
+
   const validarNombre = (valor:string) => {
     setNombre(valor);
     if (valor.length < 3) {
@@ -111,6 +136,21 @@ export const Formulario = () => {
       setErrorApellido("");
     }
   };
+
+  const validarEdad = (valor: string) => {
+    setEdad(valor);
+    if (valor.trim() === "") {
+      setErrorEdad("La edad es un campo obligatorio");
+    } else {
+      const edadNumber = parseInt(valor);
+      if (isNaN(edadNumber) || edadNumber <= 0) {
+        setErrorEdad("Debe ingresar una edad válida y positiva");
+      } else {
+        setErrorEdad("");
+      }
+    }
+  };
+  
 
   const validarEmail = (valor:string) => {
     setEmail(valor);
@@ -132,8 +172,16 @@ export const Formulario = () => {
 
   const cambiarRadio = (event: ChangeEvent<HTMLInputElement>) => {
     setLugarGrabado(event.target.value);
+    setErrorLugarGrabado("");
   };
 
+  const fecha = new Date(fechaEntrega);
+  if (isNaN(fecha.getTime())) {
+  setErrorFechaEntrega("Debe ingresar una fecha de entrega válida");
+  return;
+  }
+  
+  
   const cambiarComentario = (event: ChangeEvent<HTMLTextAreaElement>) => {
     setComentario(event.target.value);
   };
@@ -166,7 +214,7 @@ export const Formulario = () => {
         <span>{errorEdad}</span>
         <br />
       
-      <label>Posicion Grabado</label><br />
+        <label>Posicion Grabado</label><br />
         <input
           type="radio"
           id="lugarizquierda"
@@ -184,7 +232,8 @@ export const Formulario = () => {
           checked={lugarGrabado === "derecha"}
           onChange={cambiarRadio}
         />
-        <label htmlFor="lugarderecha">Derecha</label><br />      
+        <label htmlFor="lugarderecha">Derecha</label><br />
+        <span>{errorLugarGrabado}</span><br />
         <label>Email: </label><br />
         <input
           type="email"
@@ -200,8 +249,23 @@ export const Formulario = () => {
           value={telefono}
         /><br />
         <span>{errorTelefono}</span><br />
-     
-        <label>Comentarios: </label><br />
+
+        <label>Fecha de entrega:</label><br />
+        <input
+          type="date"
+          onChange={(e) => setFechaEntrega(new Date(e.target.value))}
+          value={fechaEntrega.toISOString().slice(0, 10)}
+        /><br />
+
+        <label>Hora de entrega:</label><br />
+        <input
+          type="time"
+          onChange={(e) => setHoraEntrega(e.target.value)}
+          value={horaEntrega}
+        /><br />
+        <span>{errorHoraEntrega}</span><br />
+
+      <label>Comentario: </label><br />
       <textarea
           rows={4}
           cols={50}

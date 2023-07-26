@@ -12,14 +12,22 @@ export const Actualizar = () => {
   const [edad, setEdad] = useState(""); 
   const [email, setEmail] = useState("");
   const [telefono, setTelefono] = useState("");
+  const [fechaEntrega, setFechaEntrega] = useState(new Date());
+  const [horaEntrega, setHoraEntrega] = useState(""); 
   const [comentario, setComentario] = useState("");
   const [errorNombre, setErrorNombre] = useState("");
   const [errorApellido, setErrorApellido] = useState("");
   const [errorEmail, setErrorEmail] = useState("");
   const [errorTelefono, setErrorTelefono] = useState("");
+  const [errorEdad, setErrorEdad] = useState("");
+  const [errorLugarGrabado, setErrorLugarGrabado] = useState("")
   const [idPersona, setIdPersona] = useState(""); 
   const [isLoading, setIsLoading] = useState(false);
   const [updateSuccess, setUpdateSuccess] = useState(false);
+  const [errorFechaEntrega, setErrorFechaEntrega] = useState("")
+  const [errorHoraEntrega, setErrorHoraEntrega] = useState("")
+  const [fechaEntregaString, setFechaEntregaString] = useState(""); 
+
 
   useEffect(() => {
     if (params.idPersona !== undefined) {
@@ -30,13 +38,16 @@ export const Actualizar = () => {
           setLugarGrabado(v.lugarGrabado);
           setEdad(v.edad.toString()); 
           setEmail(v.email);
-          setTelefono(v.telefono.toString()); 
+          setTelefono(v.telefono.toString());
+          setFechaEntrega(v.fechaEntrega);
+          setHoraEntrega(v.horaEntrega); 
           setComentario(v.comentario);
           setIdPersona(v.idPersona);  
         }
       });
     }
   }, [params.idPersona]);
+
 const actualizar = () => {
 
   if (nombre.trim() === "") {
@@ -51,6 +62,26 @@ const actualizar = () => {
     setApellido(apellido.trim());
   }
 
+  if (edad.trim() === "") {
+    setErrorEdad("Debe ingresar la edad");
+    return;
+  } else {
+    const edadNumber = parseInt(edad);
+    if (isNaN(edadNumber) || edadNumber <= 0) {
+      setErrorEdad("Debe ingresar una edad válida y no negativa");
+      return;
+    }
+    setEdad(edadNumber.toString());
+    setErrorEdad("");
+  }
+
+  if (!lugarGrabado) {
+    setErrorLugarGrabado("Debe seleccionar un lugar grabado");
+    return;
+  } else {
+    setErrorLugarGrabado("");
+  }
+
   if (email.trim() === "") {
     setErrorEmail("Debe ingresar un email válido");
   } else {
@@ -63,29 +94,45 @@ const actualizar = () => {
     setTelefono(telefono.trim());
   }
 
- 
-  const p: Persona = {
-    nombre,
-    apellido,
-    lugarGrabado,
-    edad: parseInt(edad),
-    email,
-    telefono: parseInt(telefono),
-    comentario,
-  };
+  if (isNaN(fechaEntrega.getTime())) {
+    setErrorFechaEntrega("Debe ingresar una fecha de entrega válida");
+    return;
+  }
 
-  actualizarPersona(idPersona, p).then(()=>{
+  if (horaEntrega.trim() === "") {
+    setErrorHoraEntrega("Debe seleccionar una hora de entrega");
+    return;
+  } else {
+    setErrorHoraEntrega("");
+  }
+
+ const p: Persona = {
+      nombre,
+      apellido,
+      lugarGrabado,
+      edad: parseInt(edad),
+      email,
+      telefono: parseInt(telefono),
+      fechaEntrega,
+      horaEntrega,
+      comentario,
+    };
+
+    actualizarPersona(idPersona, p).then(() => {
       alert("Datos actualizados de " + nombre + " " + apellido);
-  })
+      setUpdateSuccess(true); 
+    });
 
-  console.log(nombre);
-  console.log(apellido);
-  console.log(lugarGrabado);
-  console.log(edad);
-  console.log(email);
-  console.log(telefono);
-  console.log(comentario);
-};
+    console.log(nombre);
+    console.log(apellido);
+    console.log(lugarGrabado);
+    console.log(edad);
+    console.log(email);
+    console.log(telefono);
+    console.log(fechaEntrega)
+    console.log(horaEntrega)
+    console.log(comentario);
+  };
 
   const validarNombre = (valor:string) => {
     setNombre(valor);
@@ -125,11 +172,20 @@ const actualizar = () => {
 
   const cambiarRadio = (event: ChangeEvent<HTMLInputElement>) => {
     setLugarGrabado(event.target.value);
+    setErrorLugarGrabado("");
   };
+
+
+  const cambiarFechaEntrega = (e: ChangeEvent<HTMLInputElement>) => {
+    setFechaEntrega(new Date(e.target.value));
+    setErrorFechaEntrega("");
+  };
+
 
   const cambiarComentario = (event: ChangeEvent<HTMLTextAreaElement>) => {
     setComentario(event.target.value);
   };
+
   return (
     <form><br />
       <h2>Actualice los datos necesarios </h2><br />
@@ -155,8 +211,9 @@ const actualizar = () => {
           onChange={(e) => setEdad(e.target.value)}
           value={edad}
         /><br />
+          <span>{errorEdad}</span>
         <br />
-      <label>Posicion Grabado</label><br />
+        <label>Posicion Grabado</label><br />
         <input
           type="radio"
           id="lugarizquierda"
@@ -175,7 +232,7 @@ const actualizar = () => {
           onChange={cambiarRadio}
         />
         <label htmlFor="lugarderecha">Derecha</label><br />
-     
+        <span>{errorLugarGrabado}</span><br />
         <label>Email: </label><br />
         <input
           type="email"
@@ -191,16 +248,31 @@ const actualizar = () => {
           value={telefono}
         /><br />
         <span>{errorTelefono}</span><br />
-     
-        <label>Comentarios: </label><br />
+
+         <label>Fecha de entrega:</label><br />
+        <input
+        type="date"
+        onChange={cambiarFechaEntrega}
+        value={fechaEntrega}
+      /><br />
+      <span>{errorFechaEntrega}</span><br />
+
+      
+        <label>Hora de entrega:</label><br />
+        <input
+          type="time"
+          onChange={(e) => setHoraEntrega(e.target.value)}
+          value={horaEntrega}
+        /><br />
+        <span>{errorHoraEntrega}</span><br />
+
+      <label>Comentario: </label><br />
       <textarea
           rows={4}
           cols={50}
           value={comentario}
           onChange={cambiarComentario}
         /><br />
-     
-      
       <button type='button' onClick={actualizar} disabled={isLoading}>
         {isLoading ? "Actualizando..." : "Actualizar"}
       </button>

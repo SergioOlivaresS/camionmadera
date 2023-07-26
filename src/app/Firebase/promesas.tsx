@@ -2,6 +2,7 @@ import { collection, addDoc, getDocs, doc, getDoc, updateDoc, deleteDoc } from "
 import { db } from "./firebaseApp";
 import { Persona } from "../Interfaces/IFormulario";
 
+
 export const registrarPersona = async (persona: Persona): Promise<void> => {
   await addDoc(collection(db, "personas"), persona);
 };
@@ -19,6 +20,8 @@ export const obtenerPersonas = async (): Promise<Persona[]> => {
         edad: data.edad,
         email: data.email,
         telefono: data.telefono,
+        fechaEntrega: data.fechaEntrega,
+        horaEntrega: data.horaEntrega, // Corrección: debe ser data.horaEntrega en lugar de data.Horaentrega
         comentario: data.comentario,
         idPersona: documento.id,
       };
@@ -46,6 +49,8 @@ export const obtenerPersona = async (idPersona: string): Promise<Persona | undef
         edad: data.edad,
         email: data.email,
         telefono: data.telefono,
+        fechaEntrega: data.fechaEntrega,
+        horaEntrega: data.horaEntrega,
         comentario: data.comentario,
         idPersona: docSnap.id,
       };

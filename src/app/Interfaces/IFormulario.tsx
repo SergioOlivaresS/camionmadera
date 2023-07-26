@@ -5,6 +5,8 @@ export interface Persona {
     edad: number;
     email: string; 
     telefono: number; 
+    fechaEntrega: Date;
+    horaEntrega: string;
     comentario: string;
     idPersona?: string;
   }

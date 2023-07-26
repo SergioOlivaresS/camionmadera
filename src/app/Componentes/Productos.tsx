@@ -1,13 +1,17 @@
-import React from "react"
+import React from "react";
 
-export const Productos= ()=>{
-    return(    
-    <div><br />
-    <h2>Productos</h2><br />
-        <p>Lo productos que realizamos se basa en una confección y trato de la madera, que en ocasiones y según solicitudes son mezcladas con metal, 
-        creamos desde tablas de picar que siempre acompañan en eventos familiares como también empresariales, a muebles innovadores. 
-        Tambien prestamos servicios de armado de muebles y asesorías.</p>
-    
+export const Productos = () => {
+  return (
+    <div>
+      <br />
+      <h2>Tablas</h2>
+      <br />
+      <p>
+        entre los productos que realizamos  nuestras tabla de picar son de los productos mas cotizados. Estas se basan en una confección y trato de la madera, que en ocasionesy según solicitudes son mezcladas con metal,
+      </p><br />
+      <p>tabla modelo A</p><img src="/assets/tabla1.png" alt="tabla modelo A" />  
+      <p>tabla modelo B</p><img src="/assets/tabla2.png" alt="tabla modelo B" />
+      <p>tabla modelo C</p><img src="/assets/tabla3.png" alt="tabla modelo C" />
     </div>
-    )
-}
+  );
+};

@@ -8,12 +8,14 @@ import { Ofrecemos } from '../Componentes/Ofrecemos'
 import { Productos } from '../Componentes/Productos'
 import { Actualizar } from '../Componentes/Actualizar'
 import { Eliminar } from '../Componentes/Eliminar'
+import { Muebles } from '../Componentes/Muebles'
 export const AppRouter = () => {
   return (
     <Routes>
         <Route path='/*' element={<Inicio/>}/>
         <Route path='/ofrecemos' element={<Ofrecemos/>}/>
         <Route path='/productos' element={<Productos/>}/>
+        <Route path='/muebles' element={<Muebles/>}/>
         <Route path='/formulario' element={<Formulario/>}/>
         <Route path='/registros' element={<Registros/>}/>
         <Route path='/actualizar/:idPersona' element={<Actualizar/>}/>       
