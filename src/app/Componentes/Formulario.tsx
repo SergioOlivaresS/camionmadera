@@ -10,7 +10,7 @@ export const Formulario = () => {
   const [edad, setEdad] = useState("");
   const [email, setEmail] = useState("");
   const [telefono, setTelefono] = useState("");
-  const [fechaEntrega, setFechaEntrega] = useState(new Date());
+  const [rango, setRango] = useState(50);  
   const [horaEntrega, setHoraEntrega] = useState(""); 
   const [comentario, setComentario] = useState("");
   const [errorNombre, setErrorNombre] = useState("");
@@ -19,8 +19,8 @@ export const Formulario = () => {
   const [errorTelefono, setErrorTelefono] = useState("");
   const [errorLugarGrabado, setErrorLugarGrabado] = useState("")
   const [errorEdad, setErrorEdad] = useState("");
-  const [errorFechaEntrega, setErrorFechaEntrega] = useState("")
   const [errorHoraEntrega, setErrorHoraEntrega] = useState("")
+
 
   const registrar = () => {
     if (nombre.trim() === "") {
@@ -67,14 +67,10 @@ export const Formulario = () => {
       setErrorEmail("");
     }
     if (!telefono.match(/^\d{9}$/)) {
-      setErrorTelefono("Debe ingresar un número de teléfono válido (9 dígitos)");
+      setErrorTelefono("Debe ingresar un número de teléfono válido ");
       return;
     } else {
       setErrorTelefono("");
-    }
-    if (fechaEntrega === null || isNaN(fechaEntrega.getTime())) {
-      setErrorFechaEntrega("Debe ingresar una fecha de entrega válida");
-      return;
     }
 
     if (horaEntrega.trim() === "") {
@@ -90,9 +86,10 @@ export const Formulario = () => {
       edad: parseInt(edad),
       email,
       telefono: parseInt(telefono),
-      fechaEntrega,
+      rango,
       horaEntrega,
       comentario,
+
     };
 
     registrarPersona(p);
@@ -102,7 +99,7 @@ export const Formulario = () => {
   console.log(edad);
   console.log(email);
   console.log(telefono);
-  console.log(fechaEntrega);
+  console.log(rango);
   console.log(horaEntrega);
   console.log(comentario);
   alert("Se registró a " + nombre + " " + apellido);
@@ -114,7 +111,6 @@ export const Formulario = () => {
   setEdad("");
   setEmail("");
   setTelefono("");
-  setFechaEntrega(new Date());
   setHoraEntrega("");
   setComentario("");
 };
@@ -175,12 +171,6 @@ export const Formulario = () => {
     setErrorLugarGrabado("");
   };
 
-  const fecha = new Date(fechaEntrega);
-  if (isNaN(fecha.getTime())) {
-  setErrorFechaEntrega("Debe ingresar una fecha de entrega válida");
-  return;
-  }
-  
   
   const cambiarComentario = (event: ChangeEvent<HTMLTextAreaElement>) => {
     setComentario(event.target.value);
@@ -250,12 +240,15 @@ export const Formulario = () => {
         /><br />
         <span>{errorTelefono}</span><br />
 
-        <label>Fecha de entrega:</label><br />
-        <input
-          type="date"
-          onChange={(e) => setFechaEntrega(new Date(e.target.value))}
-          value={fechaEntrega.toISOString().slice(0, 10)}
-        /><br />
+        <label>Seleccionar tamaño de tabla:</label><br />
+          <input
+            type="range"
+            min="30"
+            max="100"
+            value={rango}
+            onChange={(e) => setRango(parseInt(e.target.value))}
+          /><br />
+          <span>{rango}</span><br />
 
         <label>Hora de entrega:</label><br />
         <input

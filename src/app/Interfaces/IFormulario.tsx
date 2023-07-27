@@ -5,7 +5,7 @@ export interface Persona {
     edad: number;
     email: string; 
     telefono: number; 
-    fechaEntrega: Date;
+    rango: number;
     horaEntrega: string;
     comentario: string;
     idPersona?: string;

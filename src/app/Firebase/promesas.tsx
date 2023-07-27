@@ -1,7 +1,7 @@
-import { collection, addDoc, getDocs, doc, getDoc, updateDoc, deleteDoc } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, updateDoc } from "firebase/firestore";
 import { db } from "./firebaseApp";
 import { Persona } from "../Interfaces/IFormulario";
-
+import "firebase/firestore";
 
 export const registrarPersona = async (persona: Persona): Promise<void> => {
   await addDoc(collection(db, "personas"), persona);
@@ -11,6 +11,7 @@ export const obtenerPersonas = async (): Promise<Persona[]> => {
   try {
     const querySnapshot = await getDocs(collection(db, "personas"));
     const personas: Persona[] = [];
+
     querySnapshot.forEach((documento) => {
       const data = documento.data();
       const persona: Persona = {
@@ -20,16 +21,17 @@ export const obtenerPersonas = async (): Promise<Persona[]> => {
         edad: data.edad,
         email: data.email,
         telefono: data.telefono,
-        fechaEntrega: data.fechaEntrega,
-        horaEntrega: data.horaEntrega, // Corrección: debe ser data.horaEntrega en lugar de data.Horaentrega
+        rango: data.rango,
+        horaEntrega: data.horaEntrega,
         comentario: data.comentario,
         idPersona: documento.id,
       };
+
       personas.push(persona);
     });
+
     return personas;
   } catch (error) {
-    // Manejo de errores
     console.error("Error al obtener personas:", error);
     return [];
   }
@@ -49,7 +51,7 @@ export const obtenerPersona = async (idPersona: string): Promise<Persona | undef
         edad: data.edad,
         email: data.email,
         telefono: data.telefono,
-        fechaEntrega: data.fechaEntrega,
+        rango: data.rango,
         horaEntrega: data.horaEntrega,
         comentario: data.comentario,
         idPersona: docSnap.id,

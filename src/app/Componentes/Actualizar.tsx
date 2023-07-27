@@ -12,7 +12,7 @@ export const Actualizar = () => {
   const [edad, setEdad] = useState(""); 
   const [email, setEmail] = useState("");
   const [telefono, setTelefono] = useState("");
-  const [fechaEntrega, setFechaEntrega] = useState(new Date());
+  const [rango, setRango] = useState(50);  
   const [horaEntrega, setHoraEntrega] = useState(""); 
   const [comentario, setComentario] = useState("");
   const [errorNombre, setErrorNombre] = useState("");
@@ -24,9 +24,7 @@ export const Actualizar = () => {
   const [idPersona, setIdPersona] = useState(""); 
   const [isLoading, setIsLoading] = useState(false);
   const [updateSuccess, setUpdateSuccess] = useState(false);
-  const [errorFechaEntrega, setErrorFechaEntrega] = useState("")
   const [errorHoraEntrega, setErrorHoraEntrega] = useState("")
-  const [fechaEntregaString, setFechaEntregaString] = useState(""); 
 
 
   useEffect(() => {
@@ -39,7 +37,7 @@ export const Actualizar = () => {
           setEdad(v.edad.toString()); 
           setEmail(v.email);
           setTelefono(v.telefono.toString());
-          setFechaEntrega(v.fechaEntrega);
+          setRango(v.rango);
           setHoraEntrega(v.horaEntrega); 
           setComentario(v.comentario);
           setIdPersona(v.idPersona);  
@@ -94,11 +92,6 @@ const actualizar = () => {
     setTelefono(telefono.trim());
   }
 
-  if (isNaN(fechaEntrega.getTime())) {
-    setErrorFechaEntrega("Debe ingresar una fecha de entrega válida");
-    return;
-  }
-
   if (horaEntrega.trim() === "") {
     setErrorHoraEntrega("Debe seleccionar una hora de entrega");
     return;
@@ -113,7 +106,7 @@ const actualizar = () => {
       edad: parseInt(edad),
       email,
       telefono: parseInt(telefono),
-      fechaEntrega,
+      rango,
       horaEntrega,
       comentario,
     };
@@ -129,7 +122,7 @@ const actualizar = () => {
     console.log(edad);
     console.log(email);
     console.log(telefono);
-    console.log(fechaEntrega)
+    console.log(rango)
     console.log(horaEntrega)
     console.log(comentario);
   };
@@ -174,13 +167,6 @@ const actualizar = () => {
     setLugarGrabado(event.target.value);
     setErrorLugarGrabado("");
   };
-
-
-  const cambiarFechaEntrega = (e: ChangeEvent<HTMLInputElement>) => {
-    setFechaEntrega(new Date(e.target.value));
-    setErrorFechaEntrega("");
-  };
-
 
   const cambiarComentario = (event: ChangeEvent<HTMLTextAreaElement>) => {
     setComentario(event.target.value);
@@ -249,14 +235,15 @@ const actualizar = () => {
         /><br />
         <span>{errorTelefono}</span><br />
 
-         <label>Fecha de entrega:</label><br />
-        <input
-        type="date"
-        onChange={cambiarFechaEntrega}
-        value={fechaEntrega}
-      /><br />
-      <span>{errorFechaEntrega}</span><br />
-
+        <label>Seleccionar tamaño de tabla:</label><br />
+          <input
+            type="range"
+            min="30"
+            max="100"
+            value={rango}
+            onChange={(e) => setRango(parseInt(e.target.value))}
+          /><br />
+          <span>{rango}</span><br />
       
         <label>Hora de entrega:</label><br />
         <input

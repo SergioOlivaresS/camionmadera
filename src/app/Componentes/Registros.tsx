@@ -2,17 +2,6 @@ import React, { useEffect, useState } from "react";
 import { obtenerPersonas } from "../Firebase/promesas";
 import { Persona } from "../Interfaces/IFormulario";
 import { Link } from "react-router-dom";
-import { format } from 'date-fns';
-
-const formatFecha = (fechaEntrega: Date | null) => {
-  if (!fechaEntrega) return ""; // Si la fecha es nula o indefinida, devuelve una cadena vacía
-  
-  const date = new Date();
-  const day = date.getDate().toString().padStart(2, '0');
-  const month = (date.getMonth() + 1).toString().padStart(2, '0');
-  const year = date.getFullYear();
-  return `${day}/${month}/${year}`;
-};
 
 export const Registros = () => {
   const [personas, setPersonas] = useState<Persona[]>([]);
@@ -42,7 +31,7 @@ export const Registros = () => {
         <td>{p.edad}</td>
         <td>{p.email}</td>
         <td>{p.telefono}</td>
-        <td>{p.fechaEntrega ? formatFecha(p.fechaEntrega) : ""}</td>
+        <td>{p.rango}</td>
         <td>{p.horaEntrega}</td>
         <td>{p.comentario}</td>
         <td>
@@ -64,7 +53,7 @@ export const Registros = () => {
         <th>Edad</th>
         <th>Email</th>
         <th>Telefono</th>
-        <th>Fecha De Entrega</th>
+        <th>Tamaño Tabla</th>
         <th>Hora De Entrega</th>
         <th>Comentario</th>
         <th>Editar</th>
